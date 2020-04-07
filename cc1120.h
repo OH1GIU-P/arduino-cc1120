@@ -39,7 +39,7 @@
 #define SMARTRF_SETTING_PKT_CFG0         0x20
 #define SMARTRF_SETTING_PA_CFG2          0x1D
 #define SMARTRF_SETTING_PA_CFG0          0x7D
-#define SMARTRF_SETTING_PKT_LEN          0xFF
+#define SMARTRF_SETTING_PKT_LEN          0x7F
 
 // Extended register space
 #define SMARTRF_SETTING_IF_MIX_CFG       0x00
@@ -130,6 +130,13 @@
 #define FS_DIVTWO         0x19
 #define FS_DSM0           0x1B
 #define FS_DVC0           0x1D
+#define FS_PFD            0x1F
+#define FS_PRE            0x20
+#define FS_REG_DIV_CML    0x21
+#define FS_SPARE          0x22
+#define FS_VCO0           0x27
+#define XOSC5             0x32
+#define XOSC1             0x36
 #define RSSI1             0x71
 #define RSSI0             0x72
 #define MARCSTATE         0x73
