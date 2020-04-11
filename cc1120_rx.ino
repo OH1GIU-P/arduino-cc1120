@@ -17,6 +17,7 @@ void setup() {
   Serial.begin(9600);
   pinMode(RESET_PIN, OUTPUT);
   pinMode(SS_PIN, OUTPUT);
+  pinMode(GDO0_PIN, INPUT);
   digitalWrite(SS_PIN, HIGH);
   digitalWrite(RESET_PIN, HIGH);
 
@@ -37,6 +38,7 @@ void setup() {
   bitClear(v, 4);
   writeSPI(SYNC_CFG0, v);
 
+  writeSPI(IOCFG0, RXFIFO_THR_PKT);
   writeSPI(SYNC_CFG1, SMARTRF_SETTING_SYNC_CFG1);
   writeSPI(MODCFG_DEV_E, SMARTRF_SETTING_MODCFG_DEV_E);
   writeSPI(DCFILT_CFG, SMARTRF_SETTING_DCFILT_CFG);
@@ -96,6 +98,11 @@ void setup() {
   v = readExtAddrSPI(FREQ1);
   Serial.print(F("FREQ1 "));
   Serial.println(v, HEX);
+
+  strobeSPI(SRX);
+  delay(5);
+  v = readExtAddrSPI(MARCSTATE);
+  Serial.println(v, BIN);
 }
 
 void loop() {
@@ -108,6 +115,16 @@ void printStatus() {
   Serial.print(F("State: "));
   Serial.println(ccstatus.ccst.state, HEX);
   Serial.println();  
+}
+
+uint8_t checkRX() {
+  if (digitalRead(GDO0_PIN)) {
+    while (digitalRead(GDO0_PIN));
+    return 1;
+  }
+  else {
+    return 0;
+  }
 }
 
 uint8_t readSPI(uint8_t addr) {

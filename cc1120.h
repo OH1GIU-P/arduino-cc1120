@@ -62,8 +62,13 @@
 #define SMARTRF_SETTING_XOSC1            0x03
 
 // Pins
+#define GDO0_PIN        6
 #define RESET_PIN       7
 #define SS_PIN          10
+
+#define RXFIFO_THR      0x00
+#define RXFIFO_THR_PKT  0x01
+#define PKT_SYNC_RXTX   0x06
 
 #define R_BIT           0x80
 
