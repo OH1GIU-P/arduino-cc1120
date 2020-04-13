@@ -1,6 +1,8 @@
 #include <SPI.h>
 #include "cc1120.h"
 
+#define PRINT_INFO 1
+
 struct cc_status {
  uint8_t res : 4;
  uint8_t state : 3;
@@ -23,8 +25,10 @@ void setup() {
 
   SPI.begin();
 
-  strobeSPI(SNOP);  
+  strobeSPI(SNOP);
+#ifdef PRINT_INFO  
   printStatus();
+#endif
 
   // CRC off
   uint8_t v = readSPI(PKT_CFG1);
@@ -76,7 +80,8 @@ void setup() {
   writeExtAddrSPI(FS_VCO0, SMARTRF_SETTING_FS_VCO0);
   writeExtAddrSPI(XOSC5, SMARTRF_SETTING_XOSC5);
   writeExtAddrSPI(XOSC1, SMARTRF_SETTING_XOSC1);
-  
+
+#ifdef PRINT_INFO
   v = readSPI(CHAN_BW);
   Serial.print(F("CHAN_BW "));
   Serial.println(v, HEX);
@@ -98,14 +103,22 @@ void setup() {
   v = readExtAddrSPI(FREQ1);
   Serial.print(F("FREQ1 "));
   Serial.println(v, HEX);
+#endif
+
+  attachInterrupt(digitalPinToInterrupt(GDO0_PIN), isr, RISING);
 
   strobeSPI(SRX);
   delay(5);
   v = readExtAddrSPI(MARCSTATE);
+  Serial.print(F("MARCSTATE "));
   Serial.println(v, BIN);
 }
 
 void loop() {
+}
+
+void isr() {
+  
 }
 
 void printStatus() {
@@ -117,14 +130,11 @@ void printStatus() {
   Serial.println();  
 }
 
-uint8_t checkRX() {
+bool packet_avail() {
   if (digitalRead(GDO0_PIN)) {
-    while (digitalRead(GDO0_PIN));
-    return 1;
+    return true;
   }
-  else {
-    return 0;
-  }
+  return false;
 }
 
 uint8_t readSPI(uint8_t addr) {

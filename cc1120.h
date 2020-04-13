@@ -34,7 +34,7 @@
 #define SMARTRF_SETTING_AGC_CS_THR       0x19
 #define SMARTRF_SETTING_AGC_CFG1         0xA9
 #define SMARTRF_SETTING_AGC_CFG0         0xCF
-#define SMARTRF_SETTING_FIFO_CFG         0x00
+#define SMARTRF_SETTING_FIFO_CFG         0x3F
 #define SMARTRF_SETTING_FS_CFG           0x14
 #define SMARTRF_SETTING_PKT_CFG0         0x20
 #define SMARTRF_SETTING_PA_CFG2          0x1D
@@ -62,7 +62,7 @@
 #define SMARTRF_SETTING_XOSC1            0x03
 
 // Pins
-#define GDO0_PIN        6
+#define GDO0_PIN        2
 #define RESET_PIN       7
 #define SS_PIN          10
 
@@ -151,6 +151,7 @@
 #define MODEM_STATUS0     0x93
 #define MARC_STATUS1      0x94
 #define MARC_STATUS0      0x95
+#define NUM_RXBYTES       0xD7
 #define FIFO_NUM_RXBYTES  0xD9
 
 // CC1120 command strobes
