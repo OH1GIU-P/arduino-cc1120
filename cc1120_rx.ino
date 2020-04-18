@@ -15,8 +15,12 @@ union cc_st {
 
 union cc_st ccstatus;
 
+volatile bool packetAvailable = false;
+uint8_t rxFifo[RXFIFO_SIZE];
+
 void setup() {
   Serial.begin(9600);
+  clearRxFifo();
   pinMode(RESET_PIN, OUTPUT);
   pinMode(SS_PIN, OUTPUT);
   pinMode(GDO0_PIN, INPUT);
@@ -84,11 +88,7 @@ void setup() {
 #ifdef PRINT_INFO
   v = readSPI(CHAN_BW);
   Serial.print(F("CHAN_BW "));
-  Serial.println(v, HEX);
-  writeSPI(CHAN_BW, 0x18);
-  v = readSPI(CHAN_BW);
-  Serial.print(F("CHAN_BW "));
-  Serial.println(v, HEX);
+  Serial.println(v, HEX);;
   v = readExtAddrSPI(PARTVERSION);
   Serial.print(F("PARTVERSION "));
   Serial.println(v, HEX);
@@ -96,10 +96,6 @@ void setup() {
   Serial.print(F("PARTNUMBER "));
   Serial.println(v, HEX);
 
-  v = readExtAddrSPI(FREQ1);
-  Serial.print(F("FREQ1 "));
-  Serial.println(v, HEX);
-  writeExtAddrSPI(FREQ1, 0x16);
   v = readExtAddrSPI(FREQ1);
   Serial.print(F("FREQ1 "));
   Serial.println(v, HEX);
@@ -118,7 +114,16 @@ void loop() {
 }
 
 void isr() {
-  
+  if (packetAvail()) {
+    packetAvailable = true;
+  }
+  else {
+    packetAvailable = false;
+  }
+}
+
+void clearRxFifo() {
+  memset(rxFifo, 0, sizeof(rxFifo));  
 }
 
 void printStatus() {
@@ -130,7 +135,7 @@ void printStatus() {
   Serial.println();  
 }
 
-bool packet_avail() {
+bool packetAvail() {
   if (digitalRead(GDO0_PIN)) {
     return true;
   }

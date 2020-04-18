@@ -71,6 +71,7 @@
 #define PKT_SYNC_RXTX   0x06
 
 #define R_BIT           0x80
+#define RXFIFO_SIZE     0x81
 
 // CC1120 registers
 #define IOCFG3          0x00
