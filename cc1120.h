@@ -1,51 +1,63 @@
-#ifndef cc1120_H
-#define cc1120_H
-
 /* Address Config = No address check */
-/* Bit Rate = 19.2 */
-/* Carrier Frequency = 423.875000 */
+/* Bit Rate = 1.2 */
+/* Carrier Frequency = 433.902 */
 /* Deviation = 3.997803 */
 /* Device Address = 0 */
 /* Manchester Enable = false */
-/* Modulation Format = 4-GFSK */
+/* Modulation Format = ASK/OOK */
 /* PA Ramping = false */
 /* Packet Bit Length = 0 */
-/* Packet Length = 255 */
+/* Packet Length = 3 */
 /* Packet Length Mode = Variable */
 /* Performance Mode = High Performance */
 /* RX Filter BW = 25.000000 */
-/* Symbol rate = 9.6 */
-/* TX Power = 0 */
+/* Symbol rate = 1.2 */
+/* TX Power = 12.5 */
 /* Whitening = false */
+/***************************************************************
+ *  SmartRF Studio(tm) Export
+ *
+ *  Radio register settings specifed with C-code
+ *  compatible #define statements.
+ *
+ *  RF device: CC1120
+ *
+ ***************************************************************/
 
-#define SMARTRF_SETTING_IOCFG3           0xB0
-#define SMARTRF_SETTING_IOCFG2           0x06
-#define SMARTRF_SETTING_IOCFG1           0xB0
-#define SMARTRF_SETTING_IOCFG0           0x40
-#define SMARTRF_SETTING_SYNC_CFG1        0x08
-#define SMARTRF_SETTING_MODCFG_DEV_E     0x2B
+#ifndef SMARTRF_CC1120_H
+#define SMARTRF_CC1120_H
+
+#define SMARTRF_RADIO_CC1120
+//#define SMARTRF_SETTING_IOCFG3           0xB0
+//#define SMARTRF_SETTING_IOCFG2           0x08
+//#define SMARTRF_SETTING_IOCFG1           0xB0
+#define SMARTRF_SETTING_IOCFG0           0x09
+//#define SMARTRF_SETTING_SYNC3            0xAA
+//#define SMARTRF_SETTING_SYNC2            0xAA
+//#define SMARTRF_SETTING_SYNC1            0xAA
+//#define SMARTRF_SETTING_SYNC0            0xAA
+#define SMARTRF_SETTING_SYNC_CFG1        0x1F
+#define SMARTRF_SETTING_MODCFG_DEV_E     0x1B
 #define SMARTRF_SETTING_DCFILT_CFG       0x1C
-#define SMARTRF_SETTING_PREAMBLE_CFG1    0x18
+#define SMARTRF_SETTING_PREAMBLE_CFG1    0x00
 #define SMARTRF_SETTING_IQIC             0xC6
-#define SMARTRF_SETTING_CHAN_BW          0x08
-#define SMARTRF_SETTING_MDMCFG0          0x05
-#define SMARTRF_SETTING_SYMBOL_RATE2     0x73
+#define SMARTRF_SETTING_CHAN_BW          0x0A
+#define SMARTRF_SETTING_MDMCFG1          0x06
+#define SMARTRF_SETTING_MDMCFG0          0x4A
 #define SMARTRF_SETTING_AGC_REF          0x20
 #define SMARTRF_SETTING_AGC_CS_THR       0x19
-#define SMARTRF_SETTING_AGC_CFG1         0xA9
-#define SMARTRF_SETTING_AGC_CFG0         0xCF
-#define SMARTRF_SETTING_FIFO_CFG         0x3F
+#define SMARTRF_SETTING_AGC_CFG1         0x0A
+#define SMARTRF_SETTING_FIFO_CFG         0x00
 #define SMARTRF_SETTING_FS_CFG           0x14
+#define SMARTRF_SETTING_PKT_CFG2         0x07
+#define SMARTRF_SETTING_PKT_CFG1         0x00
 #define SMARTRF_SETTING_PKT_CFG0         0x20
-#define SMARTRF_SETTING_PA_CFG2          0x1D
-#define SMARTRF_SETTING_PA_CFG0          0x7D
-#define SMARTRF_SETTING_PKT_LEN          0x7F
-
-// Extended register space
+#define SMARTRF_SETTING_PA_CFG2          0x3C
 #define SMARTRF_SETTING_IF_MIX_CFG       0x00
-#define SMARTRF_SETTING_FREQOFF_CFG      0x22
-#define SMARTRF_SETTING_FREQ2            0x69
-#define SMARTRF_SETTING_FREQ1            0xF8
+#define SMARTRF_SETTING_FREQOFF_CFG      0x23 // 0x22
+#define SMARTRF_SETTING_FREQ2            0x6C
+#define SMARTRF_SETTING_FREQ1            0x79  
+#define SMARTRF_SETTING_FREQ0            0x99
 #define SMARTRF_SETTING_FS_DIG1          0x00
 #define SMARTRF_SETTING_FS_DIG0          0x5F
 #define SMARTRF_SETTING_FS_CAL1          0x40
@@ -60,18 +72,16 @@
 #define SMARTRF_SETTING_FS_VCO0          0xB4
 #define SMARTRF_SETTING_XOSC5            0x0E
 #define SMARTRF_SETTING_XOSC1            0x03
+#define SMARTRF_SETTING_SERIAL_STATUS    0x08
 
 // Pins
 #define GDO0_PIN        2
 #define RESET_PIN       7
 #define SS_PIN          10
 
-#define RXFIFO_THR      0x00
-#define RXFIFO_THR_PKT  0x01
-#define PKT_SYNC_RXTX   0x06
+#define SERIAL_RX       0x09
 
 #define R_BIT           0x80
-#define RXFIFO_SIZE     0x81
 
 // CC1120 registers
 #define IOCFG3          0x00
@@ -127,8 +137,9 @@
 // Extended register space
 #define IF_MIX_CFG        0x00
 #define FREQOFF_CFG       0x01
-#define FREQ1             0x0D
 #define FREQ2             0x0C
+#define FREQ1             0x0D
+#define FREQ0             0x0E
 #define FS_DIG1           0x12
 #define FS_DIG0           0x13
 #define FS_CAL1           0x16
@@ -148,6 +159,7 @@
 #define MARCSTATE         0x73
 #define PARTNUMBER        0x8F
 #define PARTVERSION       0x90
+#define SERIAL_STATUS     0x91
 #define MODEM_STATUS1     0x92
 #define MODEM_STATUS0     0x93
 #define MARC_STATUS1      0x94
