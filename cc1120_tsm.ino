@@ -24,7 +24,9 @@
  
 RCSwitch rcs = RCSwitch();
 
+#define LIMIT               3500
 #define PRINT_INFO          1
+//#define RCS                 1
 #define RCS_RX              "Received "
 #define RCS_SEP             " / "
 #define RCS_UNKNOWN_ENC     "Unknown encoding"
@@ -43,14 +45,17 @@ union cc_st {
 
 union cc_st ccstatus;
 
-//volatile uint32_t duration = 0;
-//volatile bool     chg      = false;
+#ifdef RCS
+#else
+volatile uint32_t duration = 0;
+volatile bool     chg      = false;
+#endif
 
 void setup() {
-  Serial.begin(19200);
+  Serial.begin(9600);
   pinMode(RESET_PIN, OUTPUT);
   pinMode(SS_PIN, OUTPUT);
-  pinMode(GDO0_PIN, INPUT);
+  pinMode(GDO0_PIN, INPUT_PULLUP);
   digitalWrite(SS_PIN, HIGH);
   digitalWrite(RESET_PIN, HIGH);
 
@@ -118,15 +123,15 @@ void setup() {
   Serial.print(F("MARCSTATE "));
   Serial.println(v, BIN);
 
+#ifdef RCS
   rcs.enableReceive(0);
-  //attachInterrupt(digitalPinToInterrupt(GDO0_PIN), isr, CHANGE);
+#else
+  attachInterrupt(digitalPinToInterrupt(GDO0_PIN), isr, CHANGE);
+#endif
 }
 
 void loop() {
-//  if (chg) {
-//    chg = false;
-//    Serial.println(duration); 
-//  }
+#ifdef RCS
   if (rcs.available()) {
     uint32_t v = rcs.getReceivedValue();
     if (v != 0) {
@@ -143,8 +148,14 @@ void loop() {
     }
     rcs.resetAvailable();
   }
-//  uint8_t v = readExtAddrSPI(RSSI1);
-//  if (v < 127) Serial.println(v);
+#else
+  if (chg) {
+    chg = false;
+    if (duration > LIMIT) {
+      Serial.println(duration); 
+    }
+  }
+#endif
 }
 
 void printStatus() {
@@ -156,14 +167,17 @@ void printStatus() {
   Serial.println();  
 }
 
-//void isr() {
-//  static uint32_t lastTi = 0;
-//  
-//  uint32_t ti = micros();
-//  duration = ti - lastTi;
-//  chg = true;
-//  lastTi = ti;
-//}
+#ifdef RCS
+#else
+void isr() {
+  static uint32_t lastTi = 0;
+  
+  uint32_t ti = micros();
+  duration = ti - lastTi;
+  chg = true;
+  lastTi = ti;
+}
+#endif
 
 uint8_t readSPI(uint8_t addr) {
   digitalWrite(SS_PIN, LOW);
